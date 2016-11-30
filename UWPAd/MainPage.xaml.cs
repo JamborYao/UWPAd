@@ -30,19 +30,28 @@ namespace UWPAd
         }
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var wap = await WebAuthenticationCoreManager.FindAccountProviderAsync("https://login.microsoft.com", "organizations");
-            WebTokenRequest wtr = new WebTokenRequest(wap, string.Empty, "ba789272-8d97-425c-9cdf-e43c6e76d73c");
-            const string resource = "https://graph.windows.net";
-            //wtr.Properties.Add("resource", resource);
-            WebTokenRequestResult wtrr = await WebAuthenticationCoreManager.RequestTokenAsync(wtr);
-            if (wtrr.ResponseStatus == WebTokenRequestStatus.Success)
+            try
             {
-               var userAccount = wtrr.ResponseData[0].WebAccount;
+                var wap = await WebAuthenticationCoreManager.FindAccountProviderAsync("https://login.microsoft.com", "organizations");
+                WebTokenRequest wtr = new WebTokenRequest(wap, string.Empty, "ba789272-8d97-425c-9cdf-e43c6e76d73c");
+                const string resource = "https://graph.windows.net";
+                //wtr.Properties.Add("resource", resource);
+                WebTokenRequestResult wtrr = await WebAuthenticationCoreManager.RequestTokenAsync(wtr);
+                if (wtrr.ResponseStatus == WebTokenRequestStatus.Success)
+                {
+                    var userAccount = wtrr.ResponseData[0].WebAccount;
+                }
+                else
+                {
+                    var x = wtrr.ResponseError;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var x = wtrr.ResponseError;
+
+                var s=ex.Message;
             }
+           
         }
     }
 }
